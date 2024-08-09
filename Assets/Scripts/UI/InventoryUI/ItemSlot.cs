@@ -91,6 +91,8 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
             //remove item from inventory
             InventoryManager.Instance.RemoveItem(itemDropped.GetComponent<Item>());
+
+            SoundManager.Instance.PlayDropSound();
         }
     }
 

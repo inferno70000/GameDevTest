@@ -54,7 +54,7 @@ public class SaveLoadManager : SingletonMonoBehaviour<SaveLoadManager>
             sceneData.inventoryDataList.Add(inventoryData);
         }
 
-        #region write file
+        #region Write file
         BinaryFormatter fomatter = new();
 
         string path = Application.persistentDataPath + "/GameDevTest.data";
@@ -74,7 +74,7 @@ public class SaveLoadManager : SingletonMonoBehaviour<SaveLoadManager>
             //clear all item in the scene
             ClearAllItem();
 
-            #region read file
+            #region Read file
             BinaryFormatter fomatter = new();
             FileStream fileStream = new(path, FileMode.Open);
 
@@ -111,6 +111,8 @@ public class SaveLoadManager : SingletonMonoBehaviour<SaveLoadManager>
         {
             Debug.LogWarning("Save file not found");
         }
+
+        InventoryManager.Instance.CreateInventoryList();
     }
 
     /// <summary>

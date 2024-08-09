@@ -19,6 +19,22 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
     }
 
     /// <summary>
+    /// if inventory list is empty, create 10 items for each type
+    /// </summary>
+    public void CreateInventoryList()
+    {
+        if (inventoryList.Count == 0)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                AddItem(ItemName.Red);
+                AddItem(ItemName.Blue);
+                AddItem(ItemName.Pink);
+            }
+        }
+    }
+
+    /// <summary>
     /// Add an item by item name
     /// </summary>
     public void AddItem(ItemName itemName)
@@ -139,6 +155,8 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
                 //if ray hit an item, add item and destroy item in the scene
                 if (hit.collider.TryGetComponent<Item>(out var item))
                 {
+                    SoundManager.Instance.PlayPickSound();
+
                     AddItem(item.ItemName);
 
                     Destroy(item.gameObject);
