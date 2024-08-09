@@ -14,14 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemDetailsList:
   - ItemName: 0
-    Color:
-      serializedVersion: 2
-      rgba: 4278190335
+    Color: {r: 1, g: 0, b: 0, a: 1}
   - ItemName: 1
-    Color:
-      serializedVersion: 2
-      rgba: 4294901760
+    Color: {r: 0, g: 0, b: 1, a: 1}
   - ItemName: 2
-    Color:
-      serializedVersion: 2
-      rgba: 4294902015
+    Color: {r: 1, g: 0, b: 1, a: 1}

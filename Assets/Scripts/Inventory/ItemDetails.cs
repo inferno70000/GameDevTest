@@ -7,5 +7,5 @@ using UnityEngine;
 public class ItemDetails
 {
     public ItemName ItemName;   
-    public Color32 Color;
+    public Color Color;
 }

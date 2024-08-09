@@ -6,23 +6,6 @@ public class InventoryBarUI : MonoBehaviour
 {
     [SerializeField] private List<ItemSlot> itemSlotList;
 
-    private void Start()
-    {
-        //CreateItemSlotList();
-    }
-
-    //private void CreateItemSlotList()
-    //{
-    //    itemSlotList = new();
-
-    //    foreach (Transform item in transform)
-    //    {
-    //        ItemSlot itemSlot = item.GetComponent<ItemSlot>();
-
-    //        itemSlotList.Add(itemSlot);
-    //    }
-    //}
-
     private void OnEnable()
     {
         InventoryManager.Instance.OnInventoryUpdate += InventoryManager_OnInventoryUpdated;
@@ -35,9 +18,10 @@ public class InventoryBarUI : MonoBehaviour
 
     private void InventoryManager_OnInventoryUpdated(List<InventoryItem> inventoryItemList)
     {
-
+        //Clear all item slots in the inventory bar
         ClearItemSlot();
 
+        //if item slot and inventory item list are not empty, update inventory item
         if (itemSlotList.Count > 0 && inventoryItemList.Count > 0)
         {
             for (int i = 0; i < itemSlotList.Count; i++)
@@ -52,6 +36,7 @@ public class InventoryBarUI : MonoBehaviour
                     {
                         itemSlotList[i].ItemImage.color = itemDetails.Color;
                         itemSlotList[i].ItemQuantity.text = inventoryItemList[i].ItemQuantity.ToString();
+                        itemSlotList[i].SetItemDetails(itemDetails);
                     }
                 }
                 else
@@ -71,6 +56,7 @@ public class InventoryBarUI : MonoBehaviour
             {
                 itemSlotList[i].ItemImage.color = Color.white;
                 itemSlotList[i].ItemQuantity.text = "";
+                itemSlotList[i].SetItemDetails(null);
             }
         }
     }

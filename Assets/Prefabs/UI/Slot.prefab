@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.8}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -337,3 +337,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemImage: {fileID: 3876878449750321263}
   itemQuantity: {fileID: 2510563172941097817}
+  itemDragPrefab: {fileID: 4294683398146747842, guid: 06814033207b8664bbdf93935bb8a211, type: 3}
+  itemDropPrefab: {fileID: 5949143442001377301, guid: cb1e903952251694e813ebe2bbc12246, type: 3}

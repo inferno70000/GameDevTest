@@ -1,6 +1,6 @@
 public enum ItemName
 {
-    Red,
-    Blue,
-    Pink,
+    Red = 0,
+    Blue = 1,
+    Pink = 2,
 }

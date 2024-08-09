@@ -8,30 +8,19 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
     public Action<List<InventoryItem>> OnInventoryUpdate;
 
     [SerializeField] private ItemDetailsListSO itemDetailsListSO;
-    private Dictionary<string, ItemDetails> itemDetailsDictionary = new();
     private List<InventoryItem> inventoryList;
-
+    [SerializeField] private GameObject itemDragPrefab;
+    private GameObject itemDrag;
     protected override void Awake()
     {
         base.Awake();
 
-        CreateInventory();
-    }
-
-    private void CreateInventory()
-    {
         inventoryList = new();
-
-        foreach (var item in itemDetailsListSO.itemDetailsList)
-        {
-            itemDetailsDictionary.Add(item.ItemName.ToString(), item);
-        }
     }
 
     /// <summary>
     /// Add an item by item name
     /// </summary>
-    /// <param name="itemName"></param>
     public void AddItem(ItemName itemName)
     {
         int itemPosition = FindPositionItem(itemName);
@@ -60,8 +49,6 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
         inventoryItem.ItemName = itemName;
         inventoryItem.ItemQuantity = inventoryList[itemPosition].ItemQuantity + 1;
         inventoryList[itemPosition] = inventoryItem;
-
-        //PrintPickedUpItem(inventoryItem);
     }
 
     /// <summary>
@@ -75,8 +62,6 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
         inventoryItem.ItemName = itemName;
         inventoryItem.ItemQuantity = 1;
         inventoryList.Add(inventoryItem);
-
-        //PrintPickedUpItem(inventoryItem);
     }
 
     /// <summary>
@@ -137,8 +122,29 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
         return itemDetailsListSO.GetItemDetailsByName(itemName);
     }
 
-    private void PrintPickedUpItem(InventoryItem inventoryItem)
+    public List<InventoryItem> GetInventoryItemList()
     {
-        Debug.Log(inventoryItem.ItemName + " - " + inventoryItem.ItemQuantity);
+        return inventoryList;
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            //fire a ray at mouse position
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
+            {
+                //if ray hit an item, add item and destroy item in the scene
+                if (hit.collider.TryGetComponent<Item>(out var item))
+                {
+                    AddItem(item.ItemName);
+
+                    Destroy(item.gameObject);
+                }
+            }
+
+        }
     }
 }

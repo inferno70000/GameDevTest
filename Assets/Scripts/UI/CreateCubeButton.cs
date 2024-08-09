@@ -17,7 +17,7 @@ public class CreateCubeButton : MonoBehaviour
     {
         button.onClick.AddListener(() =>
         {
-            //Add 10 cube to inventory
+            //Add 10 cubes to inventory
             for (int i = 0; i < 10; i++)
             {
                 InventoryManager.Instance.AddItem(itemName);
