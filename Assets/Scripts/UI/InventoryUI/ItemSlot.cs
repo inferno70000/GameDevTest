@@ -16,6 +16,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private GameObject itemDrag;
     private Transform inventoryBarUI;
     private Transform itemParent;
+    private Item itemDropped;
 
     public Image ItemImage { get => itemImage; }
     public TextMeshProUGUI ItemQuantity { get => itemQuantity; }
@@ -30,11 +31,18 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (itemDetails != null)
         {
-            itemDrag = Instantiate(itemDragPrefab, transform.position, transform.rotation, inventoryBarUI);
+            itemDrag = Instantiate(itemDragPrefab);
 
-            Image itemImage = itemDragPrefab.GetComponent<Image>();
+            itemDropped = itemDrag.GetComponent<Item>();
 
-            itemDrag.GetComponent<Image>().color = itemDetails.Color;
+            itemDrag.transform.SetParent(itemParent, false);
+
+            itemDropped.SetItemName(itemDetails.ItemName);
+            //itemDrag = Instantiate(itemDragPrefab, transform.position, transform.rotation, inventoryBarUI);
+
+            //Image itemImage = itemDragPrefab.GetComponent<Image>();
+
+            //itemDrag.GetComponent<Image>().color = itemDetails.Color;
         }
     }
 
@@ -42,7 +50,38 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (itemDrag != null)
         {
-            itemDrag.transform.position = Input.mousePosition;
+            //itemDrag.transform.position = Input.mousePosition;
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            Vector3 dir = Vector3.zero;
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
+            {
+                dir = hit.point;
+
+                dir.y = 0.5f; //move up item's Y to spawn item at correct position 
+            }
+
+            Vector3 collisionPos = itemDrag.GetComponent<Item>().collisionPosition;
+
+            //if collider's position != zero & the distance between collider and mouse not over 1f
+            //if (collisionPos != Vector3.zero && Vector3.Distance(collisionPos, dir) <= 1f)
+            if (collisionPos != Vector3.zero && 
+                collisionPos.x < dir.x + 1 && collisionPos.x > dir.x - 1 &&
+                collisionPos.z < dir.z + 1 && collisionPos.z > dir.z - 1)
+            {
+                dir = collisionPos;
+                dir.y += 1f;
+            }
+            else
+            {
+                dir = hit.point;
+
+                dir.y = 0.5f;
+            }
+
+            itemDrag.transform.SetPositionAndRotation(dir, Quaternion.identity);
         }
     }
 
@@ -50,7 +89,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (itemDrag != null)
         {
-            Destroy(itemDrag);
+            //Destroy(itemDrag);
 
             //If drag ends over on Inventory Bar
             if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.GetComponent<ItemSlot>() != null)
@@ -72,22 +111,11 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (itemDetails != null)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Vector3 itemDragPosition = itemDrag.transform.position;
 
-            Vector3 dir = Vector3.zero;
+            itemDragPosition.y += 0.001f;
 
-            if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
-            {
-                dir = hit.point;
-
-                dir.y += 0.5f; //move up item's Y to spawn item at correct position 
-            }
-
-            //create item at mouse position and set parent on hierarchy
-            GameObject itemDropped = Instantiate(itemDropPrefab, dir, Quaternion.identity, itemParent);
-
-            //set item name to define item's color
-            itemDropped.GetComponent<Item>().SetItemName(itemDetails.ItemName);
+            itemDrag.transform.position = itemDragPosition;
 
             //remove item from inventory
             InventoryManager.Instance.RemoveItem(itemDropped.GetComponent<Item>());

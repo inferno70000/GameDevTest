@@ -337,5 +337,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemImage: {fileID: 3876878449750321263}
   itemQuantity: {fileID: 2510563172941097817}
-  itemDragPrefab: {fileID: 4294683398146747842, guid: 06814033207b8664bbdf93935bb8a211, type: 3}
+  itemDragPrefab: {fileID: 5949143442001377301, guid: cb1e903952251694e813ebe2bbc12246, type: 3}
   itemDropPrefab: {fileID: 5949143442001377301, guid: cb1e903952251694e813ebe2bbc12246, type: 3}

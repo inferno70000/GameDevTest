@@ -110,9 +110,9 @@ public class SaveLoadManager : SingletonMonoBehaviour<SaveLoadManager>
         else
         {
             Debug.LogWarning("Save file not found");
+            InventoryManager.Instance.CreateInventoryList();
         }
 
-        InventoryManager.Instance.CreateInventoryList();
     }
 
     /// <summary>

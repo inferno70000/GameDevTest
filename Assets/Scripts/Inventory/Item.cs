@@ -7,11 +7,14 @@ public class Item : MonoBehaviour
     [SerializeField] private ItemName itemName;
     private Renderer itemRenderer;
 
+    public Vector3 collisionPosition { get; private set; }
     public ItemName ItemName { get => itemName; }
 
     private void Awake()
     {
         itemRenderer = GetComponent<Renderer>();
+
+        collisionPosition = Vector3.zero;
     }
 
     private void Start()
@@ -41,5 +44,21 @@ public class Item : MonoBehaviour
     public void SetItemName(ItemName itemName)
     {
         this.itemName = itemName;
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Item"))
+        {
+            if (collisionPosition.y <= other.transform.position.y)
+            {
+                collisionPosition = other.transform.position;
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        collisionPosition = Vector3.zero;   
     }
 }
