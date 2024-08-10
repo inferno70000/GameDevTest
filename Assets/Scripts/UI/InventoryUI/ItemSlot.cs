@@ -14,7 +14,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [SerializeField] private GameObject itemDropPrefab; //item prefab to create new item in the scene
     private ItemDetails itemDetails = null; //this item slot's details
     private GameObject itemDrag;
-    private Transform inventoryBarUI;
     private Transform itemParent;
     private Item itemDropped;
 
@@ -23,7 +22,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     private void Start()
     {
-        inventoryBarUI = GameObject.FindGameObjectWithTag(InventoryBarUI).transform;
         itemParent = GameObject.FindGameObjectWithTag(ItemParent).transform;
     }
 
@@ -38,11 +36,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             itemDrag.transform.SetParent(itemParent, false);
 
             itemDropped.SetItemName(itemDetails.ItemName);
-            //itemDrag = Instantiate(itemDragPrefab, transform.position, transform.rotation, inventoryBarUI);
-
-            //Image itemImage = itemDragPrefab.GetComponent<Image>();
-
-            //itemDrag.GetComponent<Image>().color = itemDetails.Color;
         }
     }
 
@@ -50,7 +43,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (itemDrag != null)
         {
-            //itemDrag.transform.position = Input.mousePosition;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -60,13 +52,13 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             {
                 dir = hit.point;
 
-                dir.y = 0.5f; //move up item's Y to spawn item at correct position 
+                //move up item's Y to spawn item at correct position on the plane
+                dir.y = 0.5f; 
             }
 
-            Vector3 collisionPos = itemDrag.GetComponent<Item>().collisionPosition;
+            Vector3 collisionPos = itemDrag.GetComponent<Item>().CollisionPosition;
 
             //if collider's position != zero & the distance between collider and mouse not over 1f
-            //if (collisionPos != Vector3.zero && Vector3.Distance(collisionPos, dir) <= 1f)
             if (collisionPos != Vector3.zero && 
                 collisionPos.x < dir.x + 1 && collisionPos.x > dir.x - 1 &&
                 collisionPos.z < dir.z + 1 && collisionPos.z > dir.z - 1)
@@ -74,6 +66,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 dir = collisionPos;
                 dir.y += 1f;
             }
+            //else set back to position on the plane
             else
             {
                 dir = hit.point;
@@ -89,8 +82,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (itemDrag != null)
         {
-            //Destroy(itemDrag);
-
             //If drag ends over on Inventory Bar
             if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.GetComponent<ItemSlot>() != null)
             {
@@ -113,13 +104,15 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         {
             Vector3 itemDragPosition = itemDrag.transform.position;
 
-            itemDragPosition.y += 0.001f;
+            //stop trigger between 2 item
+            itemDragPosition.y += 0.001f; 
 
             itemDrag.transform.position = itemDragPosition;
 
             //remove item from inventory
             InventoryManager.Instance.RemoveItem(itemDropped.GetComponent<Item>());
 
+            //play drop sound
             SoundManager.Instance.PlayDropSound();
         }
     }

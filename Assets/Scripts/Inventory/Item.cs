@@ -7,14 +7,14 @@ public class Item : MonoBehaviour
     [SerializeField] private ItemName itemName;
     private Renderer itemRenderer;
 
-    public Vector3 collisionPosition { get; private set; }
+    public Vector3 CollisionPosition { get; private set; }
     public ItemName ItemName { get => itemName; }
 
     private void Awake()
     {
         itemRenderer = GetComponent<Renderer>();
 
-        collisionPosition = Vector3.zero;
+        CollisionPosition = Vector3.zero;
     }
 
     private void Start()
@@ -48,17 +48,19 @@ public class Item : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        //if 2 item collide
         if (other.CompareTag("Item"))
         {
-            if (collisionPosition.y <= other.transform.position.y)
+            //if 2 item overlap, set collision's position to other's position
+            if (CollisionPosition.y <= other.transform.position.y)
             {
-                collisionPosition = other.transform.position;
+                CollisionPosition = other.transform.position;
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        collisionPosition = Vector3.zero;   
+        CollisionPosition = Vector3.zero;   
     }
 }
